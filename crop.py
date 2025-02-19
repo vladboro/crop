@@ -95,16 +95,20 @@ def crop_page(image_path):
     return perspective_transform(image, page_points)
 
 if __name__ == "__main__":
-    current_dir = os.getcwd()
-    output_dir = 'output'
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
-    for filename in os.listdir(current_dir):
-        if filename.endswith('.tif') and filename != 'output.tif':
-            print(filename)
-            output = crop_page(filename)
-    
-            if output is not None:
-                show_debug_image(output, 'Output')
-                cv2.imwrite("output\\" + filename, output)
+    folder_path = input("Folder path: ")
+
+    if folder_path:
+        output_dir = os.path.join(folder_path, 'output')
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        for filename in os.listdir(folder_path):
+            if filename.endswith('.tif'):
+                print(filename)
+                output = crop_page(os.path.join(folder_path, filename))
+        
+                if output is not None:
+                    show_debug_image(output, 'Output')
+                    cv2.imwrite(os.path.join(output_dir, filename), output)
+
